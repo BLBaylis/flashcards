@@ -5,12 +5,13 @@ import DeckPreview from './DeckPreview'
 
 const DeckSelectScreen = ({ navigation, decks }) => {
 
-  const decksArr = Object.keys(decks).map(deckId => decks[deckId])
+  let decksArr = Object.keys(decks).map(deckId => decks[deckId])
 
   if (decksArr.length % 2) {
     decksArr = decksArr.concat({
       id: null,
-      name: 'Placeholder'
+      name: 'Placeholder',
+      key: 'blank'
     })
   }
 

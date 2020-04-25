@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {connect} from 'react-redux'
+import { handleNewDeck } from "../actions";
 
 class CreateDeckScreen extends Component {
 
@@ -8,10 +10,28 @@ class CreateDeckScreen extends Component {
   }
 
   updateTitle = newTitle => this.setState({ title: newTitle })
+
+  handleSubmit = () => {
+    const createAlert = message => Alert.alert(`Deck creation failed: ${message}`)
+    const title = this.state.title
+    const { handleNewDeck, navigation, deckNames } = this.props
+    this.setState({ title: ''})
+    if (!title) {
+      return createAlert('Missing name')
+    }
+    if (deckNames.includes(title.toLowerCase())) {
+      return createAlert('A deck with this name already exists')
+    }
+    try {
+      handleNewDeck(title)
+      navigation.navigate('Home')
+    } catch (error) {
+      createAlert(error.message)
+    }
+  }
   
   render() {
     const {title} = this.state
-    console.log(title)
     return (
       <View style = {styles.container}>
         <Text style = {styles.header}>Deck Title</Text>
@@ -21,7 +41,7 @@ class CreateDeckScreen extends Component {
           style = {[styles.subheader, styles.border, styles.textInput]}
           placeholder = 'New Deck Name'
         />
-        <TouchableOpacity style = {[styles.border, styles.button, styles.primary]}>
+        <TouchableOpacity style = {[styles.border, styles.button, styles.primary]} onPress = {this.handleSubmit}>
           <Text style = {[styles.buttonText, styles.primary]}>Create Deck</Text>
         </TouchableOpacity>
       </View>
@@ -74,4 +94,6 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CreateDeckScreen
+const mapStateToProps = ({ decks }) => ({ deckNames: Object.keys(decks).map(deckId => decks[deckId].name.toLowerCase())})
+
+export default connect(mapStateToProps, {handleNewDeck})(CreateDeckScreen)
