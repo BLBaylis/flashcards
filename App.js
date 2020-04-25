@@ -1,26 +1,10 @@
 import React, {Component} from 'react';
-import { View, Text } from 'react-native';
-import LandingScreen from './components/LandingScreen'
-import DeckSelectScreen from './components/DeckSelectScreen'
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
-
-function CreateDeckScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Create Deck</Text>
-    </View>
-  );
-}
+import LandingScreen from './components/LandingScreen';
+import HomeScreen from './components/HomeScreen';
+import CreateDeckScreen from './components/CreateDeckScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {MaterialIcons, Ionicons} from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,10 +20,29 @@ class App extends Component {
     const userPressedStart = this.state.userPressedStart
     return userPressedStart ? (
       <NavigationContainer>
-        <Tab.Navigator initialRouteName = {'Select Deck'}>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Create Deck" component={CreateDeckScreen} />
-          <Tab.Screen name="Select Deck" component={DeckSelectScreen} />
+        <Tab.Navigator 
+          initialRouteName = 'Home'
+          activeColor = 'purple'
+          style={{backgroundColor: 'purple'}}
+          tabBarOptions = {{
+            activeTintColor: 'purple',
+            inactiveTintColor: 'purple',
+          }}
+        >
+          <Tab.Screen 
+            name="Home" 
+            component={HomeScreen}  
+            options = {{
+              tabBarIcon: () => <Ionicons size = {30} name = 'md-home' color = {'purple'}/>
+            }}
+          />
+          <Tab.Screen 
+            name="Create Deck" 
+            component={CreateDeckScreen} 
+            options = {{
+              tabBarIcon: () => <MaterialIcons size = {35} name = 'add' color = {'purple'}/>
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     ) : <LandingScreen goToHome = {this.goToHome}/>

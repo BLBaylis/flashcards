@@ -1,21 +1,9 @@
 import React from 'react';
 import {FlatList} from 'react-native';
+import {connect} from 'react-redux'
 import DeckPreview from './DeckPreview'
 
-const DeckSelectScreen = ({ navigation }) => {
-
-  decks = {
-    1: {
-      id: 1,
-      name: 'Deck 1',
-      cardIds: [1, 2]
-    },
-    2: {
-      id: 2,
-      name: 'Deck 2',
-      cardIds: [3, 4, 7, 8]
-    }
-  }
+const DeckSelectScreen = ({ navigation, decks }) => {
 
   const decksArr = Object.keys(decks).map(deckId => decks[deckId])
 
@@ -49,4 +37,4 @@ const DeckSelectScreen = ({ navigation }) => {
   );
 }
 
-export default DeckSelectScreen
+export default connect(({ decks }) => ({ decks }))(DeckSelectScreen)
