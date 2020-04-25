@@ -1,13 +1,15 @@
 import React from 'react'
-import {StyleSheet, View, Text} from 'react-native'
+import {TouchableOpacity, StyleSheet, View, Text} from 'react-native'
 
-const Deck = ({ deckNum, empty }) => {
+const DeckPreview = ({ deckId, name, empty, onPress }) => {
   if (empty) {
     return <View style= {[styles.deck, styles.empty]}></View>
   }
   return (
     <View style = {styles.deck}>
-      <Text>Deck {deckNum}</Text>
+      <TouchableOpacity onPress = {() => onPress(deckId)}>
+        <Text>{name}</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -29,4 +31,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Deck
+export default DeckPreview

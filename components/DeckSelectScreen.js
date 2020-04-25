@@ -1,51 +1,52 @@
 import React from 'react';
-import {View, FlatList, Text, StyleSheet} from 'react-native';
-import Deck from './Deck'
+import {FlatList} from 'react-native';
+import DeckPreview from './DeckPreview'
 
-const DeckSelectScreen = () => {
+const DeckSelectScreen = ({ navigation }) => {
 
-  let decks = Array(19).fill().map((curr, index) => ({
-    id: `${index + 1}`,
-    empty: false
-  }))
+  decks = {
+    1: {
+      id: 1,
+      name: 'Deck 1',
+      cardIds: [1, 2]
+    },
+    2: {
+      id: 2,
+      name: 'Deck 2',
+      cardIds: [3, 4, 7, 8]
+    }
+  }
 
-  if (decks.length % 2) {
-    decks = decks.concat({
-      id: 'blank',
-      empty: true
+  const decksArr = Object.keys(decks).map(deckId => decks[deckId])
+
+  if (decksArr.length % 2) {
+    decksArr = decksArr.concat({
+      id: null,
+      name: 'Placeholder'
     })
   }
 
-  console.log(decks)
+  const onPress = deckId => {
+    const { name, cardIds} = decks[deckId];
+    navigation.navigate('Deck Summary', {deckId, name, cardIds})
+  }
 
   return (
     <FlatList
-      data={decks}
+      data={decksArr}
+      renderItem={({item: deck}) => (
+        <DeckPreview 
+          onPress = {onPress} 
+          deckId = {deck.id}
+          name={deck.name} 
+          empty = {deck.id === null}
+        />
+      )}
       horizontal = {false}
       numColumns = {2}
-      renderItem={({item}) => <Deck deckNum={item.id} empty = {item.id === 'blank'}/>}
       columnWrapperStyle = {{marginHorizontal: 5}}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    fontSize: 40,
-    marginTop: 30,
-    margin: 30,
-    textAlign: "center",
-    flex: 2
-  },
-  deckContainer: {
-    flex : 1,
-    borderColor : '#000',
-    borderStyle: 'solid',
-    borderWidth: 1
-  }
-})
 
 export default DeckSelectScreen
