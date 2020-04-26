@@ -1,7 +1,9 @@
-import {ADD_NEW_DECK, ADD_CARD_TO_DECK} from '../actions/types'
+import {RECEIVE_INITIAL_DECKS, ADD_NEW_DECK, ADD_CARD_TO_DECK} from '../actions/types'
 
 const decks = (state = {}, action) => {
   switch (action.type) {
+    case RECEIVE_INITIAL_DECKS:
+      return action.decks
     case ADD_NEW_DECK:
       const { id, name } = action
       return {

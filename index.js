@@ -3,12 +3,18 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux';
 import {logger} from "redux-logger";
+import thunk from 'redux-thunk'
+import throttle from 'lodash/throttle'
 
 import App from './App';
 import reducer from './reducers'
-import initialData from './_DATA'
+import {saveState} from './utils/api'
 
-const store = createStore(reducer, initialData, applyMiddleware(logger))
+const store = createStore(reducer, applyMiddleware(thunk, logger))
+
+store.subscribe(throttle(() => {
+  saveState(store.getState())
+}, 1000))
 
 const ReduxApp = () => (
   <Provider store = {store}>
