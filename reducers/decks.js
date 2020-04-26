@@ -1,19 +1,40 @@
-import {ADD_NEW_DECK} from '../actions/types'
-
+import {ADD_NEW_DECK, ADD_CARD_TO_DECK} from '../actions/types'
 
 const decks = (state = {}, action) => {
-  if (action.type === ADD_NEW_DECK) {
-    const { id, name } = action
-    return {
-      ...state,
-      [id]: {
-        id,
-        name,
-        cardIds: []
+  switch (action.type) {
+    case ADD_NEW_DECK:
+      const { id, name } = action
+      return {
+        ...state,
+        [id]: {
+          id,
+          name,
+          cardIds: []
+        }
       }
-    }
+    case ADD_CARD_TO_DECK:
+      const deckId = action.deckId
+      return {
+        ...state,
+        [deckId]: deck(state[deckId], action)
+      }
+    default:
+      return state;
   }
-  return state
+}
+
+const deck = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_CARD_TO_DECK:
+      const {cardIds} = state
+      const {cardId: newCardId} = action
+      return {
+        ...state,
+        cardIds: cardIds.includes(newCardId) ? cardIds : cardIds.concat(newCardId)
+      }
+    default:
+      return state;
+  }
 }
 
 export default decks

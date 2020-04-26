@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {connect} from 'react-redux'
+import { addCardToCards, addCardToDeck } from "../actions";
+import { generateUID } from "../utils";
 
 class CreateCardScreen extends Component {
 
@@ -8,7 +11,25 @@ class CreateCardScreen extends Component {
     answer: ''
   }
 
-  handleChange = ({ target }) => this.setState({ [target.name]: target.value })
+  handleChangeText = (text, name) => this.setState({ [name]: text })
+
+  handleSubmit = () => {
+    const createAlert = message => Alert.alert(`Card creation failed: ${message}`)
+    const {question, answer} = this.state
+    const { handleNewCard, navigation, route } = this.props
+    const { deckId, deckSize } = route.params
+    console.log(deckSize)
+    this.setState({ question: '', answer: ''})
+    if (!question || !answer) {
+      return createAlert('Missing field')
+    }
+    try {
+      handleNewCard(deckId, { question, answer })
+      navigation.navigate('Deck Summary', {deckSize: deckSize + 1 })
+    } catch (error) {
+      createAlert(error.message)
+    }
+  }
   
   render() {
     const {question, answer} = this.state
@@ -17,19 +38,22 @@ class CreateCardScreen extends Component {
         <Text style = {styles.header}>New Flashcard</Text>
         <TextInput 
           value = {question} 
-          onChange = {this.handleChange}
+          onChangeText = {text => this.handleChangeText(text, 'question')}
           style = {[styles.subheader, styles.border, styles.textInput]}
           placeholder = 'Question'
           name = 'question'
         />
         <TextInput 
           value = {answer} 
-          onChange = {this.handleChange}
+          onChangeText = {text => this.handleChangeText(text, 'answer')}
           style = {[styles.subheader, styles.border, styles.textInput]}
           placeholder = 'Answer'
           name = 'answer'
         />
-        <TouchableOpacity style = {[styles.border, styles.button, styles.primary]}>
+        <TouchableOpacity 
+          style = {[styles.border, styles.button, styles.primary]}
+          onPress = {this.handleSubmit}
+        >
           <Text style = {[styles.buttonText, styles.primary]}>Create Flashcard</Text>
         </TouchableOpacity>
       </View>
@@ -82,4 +106,12 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CreateCardScreen
+const mapDispatchToProps = dispatch => ({
+  handleNewCard: (deckId, card) => {
+    const cardId = generateUID();
+    dispatch(addCardToCards(cardId, deckId, card))
+    dispatch(addCardToDeck(deckId, cardId))
+  }
+})
+
+export default connect(null, mapDispatchToProps)(CreateCardScreen)

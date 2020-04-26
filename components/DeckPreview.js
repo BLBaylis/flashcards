@@ -1,7 +1,7 @@
 import React from 'react'
 import {TouchableOpacity, StyleSheet, View, Text} from 'react-native'
 
-const DeckPreview = ({ deckId, name, empty, onPress }) => {
+const DeckPreview = ({ deckId, name, deckSize, empty, onPress }) => {
   if (empty) {
     return <View style= {[styles.deck, styles.empty]}></View>
   }
@@ -9,6 +9,7 @@ const DeckPreview = ({ deckId, name, empty, onPress }) => {
     <View style = {styles.deck}>
       <TouchableOpacity onPress = {() => onPress(deckId)}>
         <Text>{name}</Text>
+        <Text>{deckSize} Cards</Text>
       </TouchableOpacity>
     </View>
   )
@@ -28,6 +29,9 @@ const styles = StyleSheet.create({
   empty: {
     color: 'transparent',
     borderColor: 'transparent'
+  },
+  text: {
+    textAlign: "center"
   }
 })
 

@@ -1,9 +1,4 @@
-import { addNewDeck } from "./decks";
-import { generateUID } from "../utils";
+import { addNewDeck, addCardToDeck } from "./decks";
+import { addCardToCards } from "./cards";
 
-export const handleNewDeck = name => {
-  if (!name) {
-    throw new Error('Missing name')
-  }
-  return addNewDeck(generateUID(), name)
-}
+export { addCardToCards, addCardToDeck, addNewDeck }

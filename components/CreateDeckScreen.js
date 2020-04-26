@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import {connect} from 'react-redux'
-import { handleNewDeck } from "../actions";
+import { generateUID } from "../utils";
+import { addNewDeck } from "../actions";
 
 class CreateDeckScreen extends Component {
 
@@ -15,7 +16,7 @@ class CreateDeckScreen extends Component {
     const createAlert = message => Alert.alert(`Deck creation failed: ${message}`)
     const title = this.state.title
     const { handleNewDeck, navigation, deckNames } = this.props
-    this.setState({ title: ''})
+    this.setState({ title: '' })
     if (!title) {
       return createAlert('Missing name')
     }
@@ -23,8 +24,8 @@ class CreateDeckScreen extends Component {
       return createAlert('A deck with this name already exists')
     }
     try {
-      handleNewDeck(title)
-      navigation.navigate('Home')
+      const id = handleNewDeck(title)
+      navigation.navigate('Deck Summary', {deckId: id, name: title, deckSize: 0})
     } catch (error) {
       createAlert(error.message)
     }
@@ -96,4 +97,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ decks }) => ({ deckNames: Object.keys(decks).map(deckId => decks[deckId].name.toLowerCase())})
 
-export default connect(mapStateToProps, {handleNewDeck})(CreateDeckScreen)
+const mapDispatchToProps = dispatch => ({ 
+  handleNewDeck: name => {
+    const id = generateUID()
+    dispatch(addNewDeck(id, name))
+    return id
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateDeckScreen)
