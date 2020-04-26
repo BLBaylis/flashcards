@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 class App extends Component {
 
   state = {
-    userPressedStart: true //change to false for production
+    userPressedStart: false //change to false for production
   }
 
   goToHome = () => this.setState({ userPressedStart: true })

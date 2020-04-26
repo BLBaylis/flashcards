@@ -2,16 +2,22 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 const DeckSummary = ({route, navigation}) => {
-  const {deckId, name, deckSize, cardIds} = route.params
+  const {deckId, name, deckSize} = route.params
   return (
     <View style = {styles.container}>
       <Text style = {styles.header}>{name}</Text>
       <Text style = {styles.subheader}>{deckSize} Cards</Text>
       <View style = {styles.buttonsWrapper}>
-        <TouchableOpacity style = {[styles.border, styles.button, styles.primary]}>
+        <TouchableOpacity 
+          style = {[styles.border, styles.button, styles.primary]}
+          onPress = {() => navigation.navigate('Quiz', {deckId})}
+        >
           <Text style = {[styles.buttonText, styles.primary]}>Start Quiz</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress = {() => navigation.navigate('Create Flashcard', { deckId, name, deckSize })} style = {[styles.border, styles.button, styles.secondary]}>
+        <TouchableOpacity 
+          onPress = {() => navigation.navigate('Create Flashcard', { deckId, name, deckSize })} 
+          style = {[styles.border, styles.button, styles.secondary]}
+        >
           <Text style = {[styles.buttonText, styles.secondary]}>Add Card</Text>
         </TouchableOpacity>
       </View>

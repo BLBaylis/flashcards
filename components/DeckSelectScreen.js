@@ -25,7 +25,6 @@ const DeckSelectScreen = ({ navigation, decks }) => {
       data={decksArr}
       renderItem={({item: deck}) => {
         const { id, cardIds, name } = deck;
-        console.log(deck)
         return (
           <DeckPreview 
             onPress = {onPress} 
