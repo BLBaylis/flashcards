@@ -35,7 +35,6 @@ class CreateCardScreen extends Component {
     const {question, answer} = this.state
     return (
       <View style = {styles.container}>
-        <Text style = {styles.header}>New Flashcard</Text>
         <TextInput 
           value = {question} 
           onChangeText = {text => this.handleChangeText(text, 'question')}

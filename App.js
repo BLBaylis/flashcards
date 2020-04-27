@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { handleInitialData } from './actions'
 import { createStackNavigator } from '@react-navigation/stack';
-
+import {setLocalNotification} from './services/notifications'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import LandingScreen from './components/LandingScreen';
 import HomeScreen from './components/HomeScreen';
@@ -31,6 +31,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.handleInitialData().then(() => this.setState({ loading: false }))
+    setLocalNotification()
   }
 
   goToHome = () => this.setState({ userPressedStart: true })

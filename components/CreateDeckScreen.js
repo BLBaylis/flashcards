@@ -35,7 +35,6 @@ class CreateDeckScreen extends Component {
     const {title} = this.state
     return (
       <View style = {styles.container}>
-        <Text style = {styles.header}>Deck Title</Text>
         <TextInput 
           value = {title} 
           onChangeText = {text => this.updateTitle(text)}
