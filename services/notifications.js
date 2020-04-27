@@ -4,33 +4,37 @@ import * as Permissions from 'expo-permissions'
 
 const NOTIFICATION_KEY = 'flashcards:notifications';
 
-const notification = {
-  title: 'Flashcards reminder',
-  body: "Don't forget your daily quiz!",
+const createNotification = () => ({
+  title: 'Reminder',
+  body: "Don't forget your daily flashcard quiz!",
   android: {
     sound: true,
     priority: 'high',
     sticky: false,
     vibrate: true
   }
-}
+})
 
-export const clearLocalNotification = () => AsyncStorage.removeItem(NOTIFICATION_KEY)
+export const clearLocalNotification = async () => {
+  await AsyncStorage.removeItem(NOTIFICATION_KEY)
+  return Notifications.cancelAllScheduledNotificationsAsync()
+}
 
 export const setLocalNotification = async () => {
   try {
     const data = JSON.parse(await AsyncStorage.getItem(NOTIFICATION_KEY))
-    if (data === null) {
+    if (data == null) {
       const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS)
       if (status === 'granted') {
+        await Notifications.cancelAllScheduledNotificationsAsync();
         
         const tomorrow = new Date()
-        tomorrow.setDate(tomorrow.getDate())
-        tomorrow.setHours(16)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        tomorrow.setHours(18)
         tomorrow.setMinutes(0)
 
         await Notifications.scheduleLocalNotificationAsync(
-          notification,
+          createNotification(),
           {
             time: tomorrow,
             repeat: 'day'
@@ -39,9 +43,6 @@ export const setLocalNotification = async () => {
 
         AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
       }
-    } else {
-      console.log('data', data)
-      clearLocalNotification()
     }
   } catch (err) {
     console.log(err)

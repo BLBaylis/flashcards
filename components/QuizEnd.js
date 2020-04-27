@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import TextButton from "./TextButton";
+import { clearLocalNotification, setLocalNotification } from "../services/notifications";
 
 const QuizEnd = ({ correct, total, restartQuiz, returnToDeck }) => {
+  clearLocalNotification().then(setLocalNotification)
   return (
     <View style = {styles.container}>
       <Text style = {styles.text}>You scored {correct} out of {total}</Text>

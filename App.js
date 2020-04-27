@@ -11,6 +11,22 @@ import DeckSummary from './components/DeckSummary'
 import CreateCardScreen from './components/CreateCardScreen';
 import QuizScreen from './components/QuizScreen';
 
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux';
+import {logger} from "redux-logger";
+import thunk from 'redux-thunk'
+import throttle from 'lodash/throttle'
+
+import reducer from './reducers'
+import {saveState} from './utils/api'
+
+const store = createStore(reducer, applyMiddleware(thunk, logger))
+
+store.subscribe(throttle(() => {
+  saveState(store.getState())
+}, 1000))
+
+
 const Stack = createStackNavigator();
 
 const Theme = {
@@ -54,4 +70,10 @@ class App extends Component {
   }
 }
 
-export default connect(null, {handleInitialData})(App);
+const ConnectedApp = connect(null, {handleInitialData})(App);
+
+export default () => (
+  <Provider store = {store}>
+    <ConnectedApp/>
+  </Provider>
+)
