@@ -12,20 +12,9 @@ const TextButton = ({buttonStyles, textStyles, onPress, children, ...rest}) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  text: {
-    fontSize: 30
-  },
   border: {
     borderStyle: 'solid',
     borderWidth: 1
-  },
-  buttonsWrapper: {
-    marginTop: 70,
   },
   button: {
     paddingVertical: 12,
@@ -37,14 +26,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 25,
     textAlign: 'center'
-  },
-  primary: {
-    borderColor: 'purple',
-    color: 'purple'
-  },
-  secondary: {
-    borderColor: 'orange',
-    color: 'orange'
   }
 })
 

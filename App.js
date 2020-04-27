@@ -1,15 +1,26 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux'
-import {View, Text} from 'react-native'
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {MaterialIcons, Ionicons} from '@expo/vector-icons';
+import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { handleInitialData } from './actions'
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import LandingScreen from './components/LandingScreen';
 import HomeScreen from './components/HomeScreen';
-import CreateDeckScreen from './components/CreateDeckScreen';
-import {handleInitialData} from './actions'
+import Logo from './components/Logo'
+import DeckSummary from './components/DeckSummary'
+import CreateCardScreen from './components/CreateCardScreen';
+import QuizScreen from './components/QuizScreen';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#9400d3',
+    text: '#0e0e10',
+  },
+};
 
 class App extends Component {
 
@@ -27,42 +38,19 @@ class App extends Component {
   render() {
     const userPressedStart = this.state.userPressedStart
     if (this.state.loading) {
-      return (
-        <View style = {{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>Loading...</Text>
-        </View>
-      )
+      return <Logo/>
     }
     return userPressedStart ? (
-      <NavigationContainer>
-        <Tab.Navigator 
-          initialRouteName = 'Home'
-          activeColor = 'purple'
-          style={{backgroundColor: 'purple'}}
-          tabBarOptions = {{
-            activeTintColor: 'purple',
-            inactiveTintColor: 'purple',
-          }}
-        >
-          <Tab.Screen 
-            name="Home" 
-            component={HomeScreen}  
-            options = {{
-              tabBarIcon: () => <Ionicons size = {30} name = 'md-home' color = {'purple'}/>
-            }}
-          />
-          <Tab.Screen 
-            name="Create Deck" 
-            component={CreateDeckScreen} 
-            options = {{
-              tabBarIcon: () => <MaterialIcons size = {35} name = 'add' color = {'purple'}/>
-            }}
-          />
-        </Tab.Navigator>
+      <NavigationContainer theme = {Theme}>
+        <Stack.Navigator>
+          <Stack.Screen name = "Decks" component = {HomeScreen} options = {{headerShown: false}}/>
+          <Stack.Screen name = "Deck Summary" component = {DeckSummary} />
+          <Stack.Screen name = 'Quiz' component = {QuizScreen} />
+          <Stack.Screen name = "Create Flashcard" component = {CreateCardScreen}/>
+        </Stack.Navigator>
       </NavigationContainer>
     ) : <LandingScreen goToHome = {this.goToHome}/>
   }
-  
 }
 
 export default connect(null, {handleInitialData})(App);

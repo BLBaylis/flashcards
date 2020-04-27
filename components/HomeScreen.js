@@ -1,21 +1,18 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import DeckSelectScreen from './DeckSelectScreen'
-import DeckSummary from './DeckSummary'
-import CreateCardScreen from './CreateCardScreen';
-import QuizScreen from './QuizScreen';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-const Stack = createStackNavigator();
+import DeckSelectScreen from './DeckSelectScreen'
+import CreateDeckScreen from './CreateDeckScreen';
+
+const Tab = createMaterialTopTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
 
   return (
-    <Stack.Navigator>
-      <Stack.Screen name = "Decks" component = {DeckSelectScreen} />
-      <Stack.Screen name = "Deck Summary" component = {DeckSummary} />
-      <Stack.Screen name = 'Quiz' component = {QuizScreen} />
-      <Stack.Screen name = "Create Flashcard" component = {CreateCardScreen}/>
-    </Stack.Navigator>
+    <Tab.Navigator >
+      <Tab.Screen name="Home" component={DeckSelectScreen} options = {{title: 'Decks'}}/>
+      <Tab.Screen name="Create Deck" component={CreateDeckScreen}/>
+    </Tab.Navigator>
   );
 }
 
