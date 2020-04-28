@@ -41,7 +41,7 @@ const Theme = {
 class App extends Component {
 
   state = {
-    userPressedStart: false, //change to false for production
+    userPressedStart: false,
     loading: true
   }
 

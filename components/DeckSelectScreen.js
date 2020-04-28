@@ -1,45 +1,58 @@
-import React from 'react';
-import {FlatList} from 'react-native';
+import React, { Component } from 'react';
+import { Animated } from 'react-native';
 import {connect} from 'react-redux'
 import DeckPreview from './DeckPreview'
 
-const DeckSelectScreen = ({ navigation, decks }) => {
+class DeckSelectScreen extends Component  {
 
-  let decksArr = Object.keys(decks).map(deckId => decks[deckId])
-
-  if (decksArr.length % 2) {
-    decksArr = decksArr.concat({
-      id: null,
-      name: 'Placeholder',
-      key: 'blank'
-    })
+  state = {
+    opacity: new Animated.Value(1)
   }
 
-  const onPress = deckId => {
+  onPress = deckId => {
+    const { navigation, decks } = this.props
     const { name, cardIds} = decks[deckId];
     navigation.navigate('Deck Summary', {deckId, name, deckSize: cardIds.length})
   }
 
-  return (
-    <FlatList
-      data={decksArr}
-      renderItem={({item: deck}) => {
-        const { id, cardIds, name } = deck;
-        return (
-          <DeckPreview 
-            onPress = {onPress} 
-            deckId = {id}
-            deckSize = {cardIds ? cardIds.length : 0}
-            name = {name} 
-            empty = {id === null}
-          />
-        )
-      }}
-      horizontal = {false}
-      numColumns = {2}
-      columnWrapperStyle = {{marginHorizontal: 5}}
-    />
-  );
+  resetOpacity = () => this.setState({ opacity: new Animated.Value(1) })
+
+  render() {
+    const { decks } = this.props
+    let decksArr = Object.keys(decks).map(deckId => decks[deckId])
+
+    if (decksArr.length % 2) {
+      decksArr = decksArr.concat({
+        id: null,
+        name: 'Placeholder',
+        key: 'blank'
+      })
+    }
+
+    return (
+      <Animated.FlatList
+        style = {{ opacity: this.state.opacity }}
+        data={decksArr}
+        renderItem={({item: deck}) => {
+          const { id, cardIds, name } = deck;
+          return (
+            <DeckPreview 
+              opacity = {this.state.opacity}
+              resetOpacity={this.resetOpacity}
+              onPress = {this.onPress} 
+              deckId = {id}
+              deckSize = {cardIds && cardIds.length}
+              name = {name} 
+              empty = {id === null}
+            />
+          )
+        }}
+        horizontal = {false}
+        numColumns = {2}
+        columnWrapperStyle = {{marginVertical: 10, marginHorizontal: 5}}
+      />
+    );
+  }
 }
 
 export default connect(({ decks }) => ({ decks }))(DeckSelectScreen)
