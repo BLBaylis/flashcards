@@ -18,7 +18,7 @@ $ npm install
 Have an android emulator at the ready, then 
 
 ```
-$ expo run android
+$ npm run android
 ```
 The Metro bundler will open, most likely on port 19001 and your browser will open at localhost:19002.  In this newly opened window, you have the option of turning on production mode which will increase the app's performance and disable developer logs.
 
