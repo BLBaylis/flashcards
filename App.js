@@ -4,9 +4,7 @@ import { handleInitialData } from './actions'
 import { createStackNavigator } from '@react-navigation/stack';
 import {setLocalNotification} from './services/notifications'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import LandingScreen from './components/LandingScreen';
 import HomeScreen from './components/HomeScreen';
-import Logo from './components/Logo'
 import DeckSummary from './components/DeckSummary'
 import CreateCardScreen from './components/CreateCardScreen';
 import QuizScreen from './components/QuizScreen';
@@ -40,24 +38,13 @@ const Theme = {
 
 class App extends Component {
 
-  state = {
-    userPressedStart: false,
-    loading: true
-  }
-
   componentDidMount() {
-    this.props.handleInitialData().then(() => this.setState({ loading: false }))
+    this.props.handleInitialData()
     setLocalNotification()
   }
 
-  goToHome = () => this.setState({ userPressedStart: true })
-
   render() {
-    const userPressedStart = this.state.userPressedStart
-    if (this.state.loading) {
-      return <Logo/>
-    }
-    return userPressedStart ? (
+    return (
       <NavigationContainer theme = {Theme}>
         <Stack.Navigator>
           <Stack.Screen name = "Decks" component = {HomeScreen} options = {{headerShown: false}}/>
@@ -66,7 +53,7 @@ class App extends Component {
           <Stack.Screen name = "Create Flashcard" component = {CreateCardScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
-    ) : <LandingScreen goToHome = {this.goToHome}/>
+    )
   }
 }
 

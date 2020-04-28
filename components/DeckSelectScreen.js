@@ -31,7 +31,11 @@ class DeckSelectScreen extends Component  {
 
     return (
       <Animated.FlatList
-        style = {{ opacity: this.state.opacity }}
+        style = {{ 
+          opacity: this.state.opacity,
+          marginVertical: 5,
+          flex: 1
+        }}
         data={decksArr}
         renderItem={({item: deck}) => {
           const { id, cardIds, name } = deck;
@@ -49,7 +53,7 @@ class DeckSelectScreen extends Component  {
         }}
         horizontal = {false}
         numColumns = {2}
-        columnWrapperStyle = {{marginVertical: 10, marginHorizontal: 5}}
+        columnWrapperStyle = {{margin: 5}}
       />
     );
   }

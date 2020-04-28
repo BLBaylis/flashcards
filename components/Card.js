@@ -49,7 +49,7 @@ class Card extends Component {
             </>
           )}
         </View>
-        {!(lastCard && answered) && <Text>{lastCard ? 'Final card' : `${remainingCards} cards left`}</Text>}
+        <Text style ={{fontSize: 20}}>{lastCard ? 'Final card' : `${remainingCards} cards left`}</Text>
       </View>
     );
   }

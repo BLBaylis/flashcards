@@ -33,7 +33,7 @@ class DeckPreview extends Component {
         <TouchableWithoutFeedback style = {styles.button} onPress = {this.onPress}>
           <View style = {styles.textWrapper}>
             <Text style = {styles.buttonText}>{name}</Text>
-            <Text style = {styles.buttonText}>{deckSize} {deckSize > 1 ? 'Cards' : 'Card'}</Text>
+            <Text style = {styles.buttonText}>{deckSize} {deckSize === 1 ? 'card' : 'cards'}</Text>
           </View>
         </TouchableWithoutFeedback>
       </Animated.View>
